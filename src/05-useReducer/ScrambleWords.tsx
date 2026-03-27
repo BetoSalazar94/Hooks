@@ -2,7 +2,7 @@
 // Es necesario componentes de Shadcn/ui
 // https://ui.shadcn.com/docs/installation/vite
 
-import React, { useReducer, useState } from 'react';
+import React, { useEffect, useReducer, useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Card, CardContent } from '@/components/ui/card';
@@ -24,77 +24,44 @@ export const ScrambleWords = () => {
         , guess, isGameOver, points, skipCounter, scrambledWord, totalWords
     } = state;
 
-    // const [words, setWords] = useState(shuffleArray(GAME_WORDS));
+    useEffect(() => {
 
-    // const [currentWord, setCurrentWord] = useState(words[0]);
-    // const [scrambledWord, setScrambledWord] = useState(scrambleWord(currentWord));
-    // const [guess, setGuess] = useState('');
-    // const [points, setPoints] = useState(0);
-    // const [errorCounter, setErrorCounter] = useState(0);
-    // const [maxAllowErrors, setMaxAllowErrors] = useState(3);
+        if (state.guess == state.currentWord) {
+            confetti({
+                particleCount: 100,
+                spread: 70,
+                origin: { y: 0.6 }
+            });
+        }
 
-    // const [skipCounter, setSkipCounter] = useState(0);
-    // const [maxSkips, setMaxSkips] = useState(3);
-
-    // const [isGameOver, setIsGameOver] = useState(false);
+    }, [state.guess]);
 
     const handleGuessSubmit = (e: React.FormEvent) => {
         // Previene el refresh de la página
-        // e.preventDefault();
+        e.preventDefault();
         // // Implementar lógica de juego
 
 
+        dispatch({ type: 'CHECK_ANSWER', });
 
 
 
-        // if (guess.toUpperCase() === currentWord.toUpperCase()) {
-
-        //     confetti({
-        //         particleCount: 100,
-        //         spread: 120,
-        //         origin: { y: 0.6 },
-        //     });
-
-        //     setPoints(points + 1);
-        //     setGuess('');
-        //     setCurrentWord(words[points + 1]);
-        //     setScrambledWord(scrambleWord(words[points + 1]));
-        // } else {
-        //     setErrorCounter(errorCounter + 1);
-        // }
-
-        // if (errorCounter === maxAllowErrors) {
-        //     setIsGameOver(true);
-        //     return;
-        // }
 
 
-        // console.log('Intento de adivinanza:', guess, currentWord);
 
     };
 
     const handleSkip = () => {
 
-        // if (skipCounter === maxSkips) {
-        //     return;
-        // }
+        dispatch({ type: 'SKIP_WORD' });
 
-        // console.log('Palabra saltada');
-        // setSkipCounter(skipCounter + 1);
-        // setCurrentWord(words[skipCounter + 1]);
-        // setScrambledWord(scrambleWord(words[skipCounter + 1]));
-        // setGuess('');
 
     };
 
     const handlePlayAgain = () => {
 
-        // setCurrentWord(words[0]);
-        // setScrambledWord(scrambleWord(words[0]));
-        // setPoints(0);
-        // setErrorCounter(0);
-        // setSkipCounter(0);
-        // setIsGameOver(false);
+        dispatch({ type: 'START_NEW_GAME', payload: getInitialState() });
+
     };
 
     //! Si ya no hay palabras para jugar, se muestra el mensaje de fin de juego
@@ -176,8 +143,7 @@ export const ScrambleWords = () => {
                                         type="text"
                                         value={guess}
                                         onChange={(e) =>
-                                            //setGuess(e.target.value.toUpperCase().trim())
-                                            console.log(e.target.value)
+                                            dispatch({ type: 'SET_GUESS', payload: e.target.value })
                                         }
                                         placeholder="Ingresa tu palabra..."
                                         className="text-center text-lg font-semibold h-12 border-2 border-indigo-200 focus:border-indigo-500 transition-colors"

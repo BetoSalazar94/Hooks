@@ -21,8 +21,9 @@ export type ScrambleWordAction =
     | { type: 'SET_ERROR_COUNTER'; payload: number }
     | { type: 'SET_MAX_ALLOW_ERRORS'; payload: number }
     | { type: 'SET_SKIP_COUNTER'; payload: number }
-    | { type: 'SET_MAX_SKIPS'; payload: number }
-    | { type: 'SET_IS_GAME_OVER'; payload: boolean };
+    | { type: 'START_NEW_GAME'; payload: ScrambleWordState }
+    | { type: 'SKIP_WORD'; }
+    | { type: 'CHECK_ANSWER'; };
 
 const GAME_WORDS = [
     'REACT',
@@ -79,6 +80,58 @@ export const scrambleWordReducer = (state: ScrambleWordState, action: ScrambleWo
     ScrambleWordState => {
 
     switch (action.type) {
+
+        case 'SET_GUESS':
+            return {
+                ...state,
+                guess: action.payload.trim().toUpperCase()
+            };
+
+        case 'CHECK_ANSWER':
+            {
+
+                if (state.currentWord === state.guess) {
+
+                    const newWords = state.words.slice(1);
+
+                    return {
+                        ...state,
+                        words: newWords,
+                        points: state.points + 1,
+                        guess: '',
+                        currentWord: newWords[0],
+                        scrambledWord: scrambleWord(newWords[0]),
+                    };
+                } else {
+                    return {
+                        ...state,
+                        errorCounter: state.errorCounter + 1,
+                        guess: '',
+                        isGameOver: state.errorCounter + 1 >= state.maxAllowErrors
+                    };
+                }
+            }
+        case 'SKIP_WORD': {
+
+            if (state.skipCounter >= state.maxSkips) return state;
+
+            const updatedWords = state.words.slice(1);
+
+            return {
+                ...state,
+                skipCounter: state.skipCounter + 1,
+                words: updatedWords,
+                currentWord: updatedWords[0],
+                scrambledWord: scrambleWord(updatedWords[0]),
+                guess: ''
+            }
+
+        }
+
+        case 'START_NEW_GAME': {
+
+        }
+
         default:
             return state;
     }
