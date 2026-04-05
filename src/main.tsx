@@ -1,10 +1,12 @@
-import { StrictMode } from 'react'
+import { StrictMode, Suspense } from 'react'
 import { createRoot } from 'react-dom/client'
 
-
+import { Toaster } from 'sonner'
 import './index.css'
 import { MemoHook } from './06-memos/MemoHook'
-import { InstagramApp } from './07-useOptimistic/InstagramApp'
+import { ClientInformation } from './08-use-suspense/ClientInformation'
+import { getUserAction } from './08-use-suspense/api/get-user.action'
+// import { InstagramApp } from './07-useOptimistic/InstagramApp'
 //import { TrafficLight } from './01-useState/TrafficLight'
 
 //import { TrafficLightWithHook } from './02-useEffect/TrafficLightWithHook'
@@ -18,6 +20,10 @@ import { InstagramApp } from './07-useOptimistic/InstagramApp'
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
-    <InstagramApp />
+    {/* <Toaster /> */}
+    <Suspense fallback={<p className="text-white text-2xl">Loading...</p>}>
+      <ClientInformation getUser={getUserAction(1000)} ></ClientInformation>
+    </Suspense>
+    {/* <InstagramApp /> */}
   </StrictMode>,
 )

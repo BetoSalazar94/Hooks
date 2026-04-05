@@ -2,6 +2,8 @@ import { resolve } from 'path';
 import { useOptimistic, useState, useTransition } from 'react';
 import { promise } from 'zod';
 
+import { toast } from 'sonner'
+
 interface Comment {
     id: number;
     text: string;
@@ -36,11 +38,25 @@ export const InstagramApp = () => {
 
             await new Promise((resolve) => setTimeout(resolve, 2000));
 
-            setComments((prev) => [
-                ...prev,
-                { id: prev.length + 1, text: messageText as string },
-            ]);
+            /*             setComments((prev) => [
+                            ...prev,
+                            { id: prev.length + 1, text: messageText as string },
+                        ]); */
 
+            //codigo para revertir
+            setComments((prev) => prev);
+
+            toast('Error al agregar el comentario', {
+                description: 'Intenta de nuevo mas tarde',
+                duration: 10_000,
+                position: 'top-right',
+                action: {
+                    label: 'Cerrar',
+                    onClick: () => {
+                        toast.dismiss();
+                    }
+                }
+            })
         });
 
 
