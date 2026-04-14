@@ -6,6 +6,7 @@ import './index.css'
 import { MemoHook } from './06-memos/MemoHook'
 import { ClientInformation } from './08-use-suspense/ClientInformation'
 import { getUserAction } from './08-use-suspense/api/get-user.action'
+import { ProfessionalApp } from './09-useContext/ProfessionalApp'
 // import { InstagramApp } from './07-useOptimistic/InstagramApp'
 //import { TrafficLight } from './01-useState/TrafficLight'
 
@@ -20,10 +21,14 @@ import { getUserAction } from './08-use-suspense/api/get-user.action'
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
-    {/* <Toaster /> */}
-    <Suspense fallback={<p className="text-white text-2xl">Loading...</p>}>
+    <Toaster />
+    {/*   <Suspense fallback={<p className="text-white text-2xl">Loading...</p>}>
       <ClientInformation getUser={getUserAction(1000)} ></ClientInformation>
-    </Suspense>
+    </Suspense> */}
     {/* <InstagramApp /> */}
+
+
+    <ProfessionalApp></ProfessionalApp>
+
   </StrictMode>,
 )
